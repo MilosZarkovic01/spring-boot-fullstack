@@ -1,0 +1,26 @@
+  server:
+    port:
+    error:
+      include-message: always #it might leak information, by default it's never
+
+
+  #spring:
+  #  main:
+  #    web-application-type: "none"   #by default is servlet
+
+
+  spring:
+    datasource:
+      url: jdbc:postgresql://localhost:5332/customer
+      username: somika
+      password: password
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      show-sql: true
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          format_sql: true
+    main:
+      web-application-type: servlet
