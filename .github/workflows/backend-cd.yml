@@ -27,7 +27,7 @@ jobs:
           --health-retries 5
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./
     steps:
       - name: Send Slack Message
         run: |
