@@ -51,21 +51,23 @@ jobs:
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Send Slack Message
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json'
-          --data '
-            {"text":"Building with Maven :maven:"}
-          '
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $webhookUrl = ${{ secrets.SLACK_WEBHOOK_SECRET }}
+          $jsonData = @{
+              text = "Building with Maven :maven:"
+          } | ConvertTo-Json
+        
+          Invoke-WebRequest -Uri $webhookUrl -Method Post -Headers @{"Content-type"="application/json"} -Body $jsonData
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
       - name: Send Slack Message
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json'
-          --data '
-            {"text":"Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to Dockerhub :docker:"}
-          '
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $webhookUrl = ${{ secrets.SLACK_WEBHOOK_SECRET }}
+          $jsonData = @{
+              text = "Image tag pushed to Dockerhub :docker:"
+          } | ConvertTo-Json
+          
+          Invoke-WebRequest -Uri $webhookUrl -Method Post -Headers @{"Content-type"="application/json"} -Body $jsonData
       - name: Update Dockerrun.aws.json api image tag with new build number
         run: |
           echo "Dockerrun.aws.json before updating tag"
@@ -74,12 +76,13 @@ jobs:
           echo "Dockerrun.aws.json after updating tag"
           cat Dockerrun.aws.json
       - name: Send Slack Message
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json'
-          --data '
-            {"text":"Starting deployment to Elastic Beanstalk :aws:"}
-          '
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $webhookUrl = ${{ secrets.SLACK_WEBHOOK_SECRET }}
+          $jsonData = @{
+              text = "Starting deployment to Elastic Beanstalk :aws:"
+          } | ConvertTo-Json
+          
+          Invoke-WebRequest -Uri $webhookUrl -Method Post -Headers @{"Content-type"="application/json"} -Body $jsonData
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -92,12 +95,13 @@ jobs:
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
       - name: Send Slack Message
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json'
-          --data '
-            {"text":":githubloading: Commiting to repo https://github.com/MilosZarkovic01/spring-boot-fullstack"}
-          '
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $webhookUrl = ${{ secrets.SLACK_WEBHOOK_SECRET }}
+          $jsonData = @{
+              text = ":githubloading: Commiting to repo https://github.com/MilosZarkovic01/spring-boot-fullstack"
+          } | ConvertTo-Json
+          
+          Invoke-WebRequest -Uri $webhookUrl -Method Post -Headers @{"Content-type"="application/json"} -Body $jsonData
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
@@ -106,17 +110,19 @@ jobs:
           git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
           git push
       - name: Send Slack Message
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json'
-          --data '
-            {"text":"Deployment and commit completed :github_check_mark: -"}
-          '
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $webhookUrl = ${{ secrets.SLACK_WEBHOOK_SECRET }}
+          $jsonData = @{
+              text = "Deployment and commit completed :github_check_mark:"
+          } | ConvertTo-Json
+          
+          Invoke-WebRequest -Uri $webhookUrl -Method Post -Headers @{"Content-type"="application/json"} -Body $jsonData
       - name: Send Slack Message
         if: always()
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json'
-          --data '
-            {"text":"Job Status ${{ job.status }}"}
-          '
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          $webhookUrl = ${{ secrets.SLACK_WEBHOOK_SECRET }}
+          $jsonData = @{
+              text = "Job status job.status"
+          } | ConvertTo-Json
+          
+          Invoke-WebRequest -Uri $webhookUrl -Method Post -Headers @{"Content-type"="application/json"} -Body $jsonData
