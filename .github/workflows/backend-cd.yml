@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Send Slack Message
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":"Deployment started :progress_bar:"}
           '
@@ -52,7 +52,7 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Send Slack Message
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":"Building with Maven :maven:"}
           '
@@ -61,7 +61,7 @@ jobs:
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
       - name: Send Slack Message
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":"Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to Dockerhub :docker:"}
           '
@@ -75,7 +75,7 @@ jobs:
           cat Dockerrun.aws.json
       - name: Send Slack Message
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":"Starting deployment to Elastic Beanstalk :aws:"}
           '
@@ -93,7 +93,7 @@ jobs:
           deployment_package: backend/Dockerrun.aws.json
       - name: Send Slack Message
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":":githubloading: Commiting to repo https://github.com/MilosZarkovic01/spring-boot-fullstack"}
           '
@@ -107,7 +107,7 @@ jobs:
           git push
       - name: Send Slack Message
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":"Deployment and commit completed :github_check_mark: -"}
           '
@@ -115,7 +115,7 @@ jobs:
       - name: Send Slack Message
         if: always()
         run: >
-          docker run --rm -it alpine apk and curl && curl -X POST -H 'Content-type: application/json'
+          curl && curl -X POST -H 'Content-type: application/json'
           --data '
             {"text":"Job Status ${{ job.status }}"}
           '
