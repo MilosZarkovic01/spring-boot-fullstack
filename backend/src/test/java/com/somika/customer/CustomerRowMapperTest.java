@@ -21,13 +21,14 @@ class CustomerRowMapperTest {
                 10l,
                 "Alex",
                 "alex@gmail.com",
-                22
-        );
+                22,
+                Gender.FEMALE);
 
         when(rs.getLong("id")).thenReturn(customer.getId());
         when(rs.getString("name")).thenReturn(customer.getName());
         when(rs.getString("email")).thenReturn(customer.getEmail());
         when(rs.getInt("age")).thenReturn(customer.getAge());
+        when(rs.getString("gender")).thenReturn("FEMALE");
 
         Customer actual = customerRowMapper.mapRow(rs, 1);
 
