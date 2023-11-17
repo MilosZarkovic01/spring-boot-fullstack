@@ -43,7 +43,7 @@ public class CustomerIntegrationTest {
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age, gender
+                name, email, "password", age, gender
         );
 
         // send post request
@@ -71,7 +71,7 @@ public class CustomerIntegrationTest {
 
         // make sure that customer is present
         Customer expectedCustomer = new Customer(
-                name, email, age, gender);
+                name, email, "password", age, gender);
 
         assertThat(allCustomers)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
@@ -111,7 +111,7 @@ public class CustomerIntegrationTest {
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age, gender
+                name, email, "password", age, gender
         );
 
         // send post request
@@ -173,7 +173,7 @@ public class CustomerIntegrationTest {
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age, gender
+                name, email, "password", age, gender
         );
 
         // send post request
@@ -232,7 +232,7 @@ public class CustomerIntegrationTest {
                 .getResponseBody();
 
         Customer expected = new Customer(
-                id, newName, email, age, gender);
+                id, newName, email, "password", age, gender);
 
         assertThat(actual).isEqualTo(expected);
     }

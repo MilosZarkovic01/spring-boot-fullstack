@@ -17,14 +17,14 @@ public class CustomerListDataAccessService implements CustomerDao {
                 1l,
                 "Alex",
                 "alex@gmail.com",
-                28,
+                "password", 28,
                 Gender.MALE);
 
         Customer jamila = new Customer(
                 2l,
                 "Jamila",
                 "jamila@gmail.com",
-                19,
+                "password", 19,
                 Gender.MALE);
         customers.add(alex);
         customers.add(jamila);
@@ -60,7 +60,7 @@ public class CustomerListDataAccessService implements CustomerDao {
         Optional<Customer> customer = customers.stream()
                 .filter(c -> c.getId().equals(id))
                 .findFirst();
-                //.ifPresent()
+        //.ifPresent()
         if (customer.isPresent()) {
             customers.remove(customer);
         }
@@ -75,5 +75,12 @@ public class CustomerListDataAccessService implements CustomerDao {
     @Override
     public void updateCustomer(Customer update) {
         customers.add(update);
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        return customers.stream()
+                .filter(c -> c.getUsername().equals(email))
+                .findFirst();
     }
 }

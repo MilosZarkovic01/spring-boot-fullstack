@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("jpa")
-public class CustomerJPADataAccessServise implements CustomerDao{
+public class CustomerJPADataAccessServise implements CustomerDao {
 
     private final CustomerRepository customerRepository;
 
@@ -47,5 +47,10 @@ public class CustomerJPADataAccessServise implements CustomerDao{
     @Override
     public void updateCustomer(Customer update) {
         customerRepository.save(update);
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        return customerRepository.findCustomerByEmail(email);
     }
 }

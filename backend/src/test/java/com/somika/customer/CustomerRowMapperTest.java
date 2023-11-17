@@ -21,7 +21,7 @@ class CustomerRowMapperTest {
                 10l,
                 "Alex",
                 "alex@gmail.com",
-                22,
+                "password", 22,
                 Gender.FEMALE);
 
         when(rs.getLong("id")).thenReturn(customer.getId());
